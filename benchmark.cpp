@@ -32,8 +32,7 @@ namespace benchmark {
 
 void timethis(unsigned long count, void (*func)()) {
   double took = run(count, func);
-  double times = count / took;
-  printf("%.2f/s\n", times);
+  printf("%.2f count/s (= %.3f msec/count)\n", count / took, took / count * 1000);
 }
 
 void cmpthese(unsigned long count,
@@ -44,10 +43,18 @@ void cmpthese(unsigned long count,
 
   size_t max = strlen(name1) > strlen(name2) ? strlen(name1) : strlen(name2);
   stringstream ss;
-  ss << "%" << max << "s " << "%9.2f/s (%5ld%)\n";
+  ss << "%" << max << "s " << "%12.2f count/s (= %.3f msec/count) (ratio: %5ld%)\n";
   string format = ss.str();
-  printf(format.c_str(), name1, count / took1, static_cast<unsigned long>(took2 / took1 * 100));
-  printf(format.c_str(), name2, count / took2, static_cast<unsigned long>(took1 / took2 * 100));
+  printf(format.c_str(),
+         name1,
+         count / took1,
+         took1 / count * 1000,
+         static_cast<unsigned long>(took2 / took1 * 100));
+  printf(format.c_str(),
+         name2,
+         count / took2,
+         took2 / count * 1000,
+         static_cast<unsigned long>(took1 / took2 * 100));
 }
 
 }

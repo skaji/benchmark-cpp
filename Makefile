@@ -1,3 +1,6 @@
+all: libbenchmark.so
+	cd eg && $(MAKE)
+
 libbenchmark.so: benchmark.o
 	$(CXX) -shared -o $@ $<
 
